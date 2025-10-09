@@ -1,301 +1,66 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sistema de Gestión - Veterinaria "El Dogo"</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body class="antialiased">
-
-    <!-- =========== VISTA DE PORTADA (Landing Page) =========== -->
-    <div id="landing-view" class="landing-view">
-        <div class="landing-card card">
-            <span style="font-size: 5rem;" class="block mb-4">🩺</span>
-            <h1>
-                Veterinaria 
-                <br>
-                "El Dogo"
-            </h1>
-            <p>
-                Cuidado, confianza y gestión eficiente para la salud de tus mascotas.
-            </p>
-            <button id="open-login-modal" class="btn btn-primary">
-                Acceder al Sistema
-            </button>
-        </div>
-        <p style="margin-top: 5rem; font-size: 0.75rem; color: var(--color-text-muted);">
-            Aplicación de Gestión | Diseño Amigable
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
+    <main id="app-container" class="app-container">
+      <!-- LOGIN -->
+      <div id="login-view" class="view">
+        <h2>🔐 Acceso al Sistema</h2>
+        <form id="form-login">
+          <input type="email" id="email" placeholder="Email" required />
+          <input
+            type="password"
+            id="password"
+            placeholder="Contraseña"
+            required
+          />
+          <button type="submit">Ingresar</button>
+        </form>
+        <p id="login-error" class="text-error hidden"></p>
+        <p>
+          ¿No tienes cuenta?
+          <a href="#" id="link-register">Regístrate aquí</a>
         </p>
-    </div>
+      </div>
 
-    <!-- =========== MODAL DE AUTENTICACIÓN (LOGIN/REGISTRO) =========== -->
-    <div id="auth-modal" class="modal-backdrop hidden-view">
-        <div class="modal-content">
-            <button id="close-auth-modal" class="modal-close">&times;</button>
-            
-            <div id="auth-content">
-                
-                <!-- Login Form (Visible por defecto) -->
-                <div id="login-form-view">
-                    <h2>Acceso de Personal</h2>
-                    <form id="login-form">
-                        <div style="margin-bottom: 1rem;">
-                            <label for="auth-username" style="display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.25rem;">Usuario (Email)</label>
-                            <input type="text" id="auth-username" value="admin" required>
-                        </div>
-                        <div style="margin-bottom: 1.5rem;">
-                            <label for="auth-password" style="display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.25rem;">Contraseña</label>
-                            <input type="password" id="auth-password" value="password" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%;">Iniciar Sesión</button>
-                    </form>
-                    <p id="login-error" style="color: #EF4444; font-size: 0.875rem; margin-top: 1rem; text-align: center;" class="hidden-view">Credenciales incorrectas.</p>
-                    <p style="margin-top: 1.5rem; text-align: center; font-size: 0.875rem; color: var(--color-text-muted);">
-                        ¿Eres nuevo empleado? 
-                        <button type="button" id="switch-to-register" style="color: var(--color-primary); font-weight: 600; background: none; border: none; cursor: pointer;">Regístrate aquí</button>
-                    </p>
-                </div>
+      <!-- REGISTRO -->
+      <div id="register-view" class="view hidden">
+        <h2>📝 Nuevo Registro</h2>
+        <form id="form-register">
+          <input
+            type="text"
+            id="reg-nombre"
+            placeholder="Nombre completo"
+            required
+          />
+          <input type="email" id="reg-username" placeholder="Email" required />
+          <input
+            type="password"
+            id="reg-password"
+            placeholder="Contraseña"
+            required
+          />
+          <input
+            type="password"
+            id="reg-password-confirm"
+            placeholder="Repetir Contraseña"
+            required
+          />
+          <button type="submit">Crear Cuenta</button>
+        </form>
+        <p id="register-error" class="text-error hidden"></p>
+        <p>
+          ¿Ya tienes cuenta?
+          <a href="#" id="link-back-login">← Volver al login</a>
+        </p>
+      </div>
+    </main>
 
-                <!-- Registro Form (Oculto por defecto) -->
-                <div id="register-form-view" class="hidden-view">
-                     <h2>Registro de Nuevo Usuario</h2>
-                    <form id="register-form">
-                        <div style="margin-bottom: 1rem;">
-                            <label for="reg-email" style="display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.25rem;">Email (Usuario)</label>
-                            <input type="email" id="reg-email" placeholder="ejemplo@vet.com" required>
-                        </div>
-                        <div style="margin-bottom: 1rem;">
-                            <label for="reg-password" style="display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.25rem;">Contraseña</label>
-                            <input type="password" id="reg-password" placeholder="Mínimo 6 caracteres" required>
-                        </div>
-                        <div style="margin-bottom: 1.5rem;">
-                            <label for="reg-nombre" style="display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.25rem;">Nombre Completo</label>
-                            <input type="text" id="reg-nombre" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%;">Crear Cuenta</button>
-                    </form>
-                    <p id="register-message" style="color: var(--color-secondary); font-size: 0.875rem; margin-top: 1rem; text-align: center;" class="hidden-view">Usuario registrado. Por favor inicia sesión.</p>
-                    <p style="margin-top: 1.5rem; text-align: center; font-size: 0.875rem; color: var(--color-text-muted);">
-                        ¿Ya tienes una cuenta? 
-                        <button type="button" id="switch-to-login" style="color: var(--color-primary); font-weight: 600; background: none; border: none; cursor: pointer;">Inicia Sesión</button>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- =========== APLICACIÓN PRINCIPAL (Oculta por defecto) =========== -->
-    <div id="main-app" class="hidden-view">
-        <!-- Header -->
-        <header>
-            <div class="container header-content">
-                <div style="display: flex; align-items: center;">
-                    <span class="logo">🐾 El Dogo</span>
-                    <nav style="display: flex;">
-                       <a href="#" id="nav-dashboard" class="active">Dashboard</a>
-                       <a href="#" id="nav-clientes">Clientes</a>
-                       <a href="#" id="nav-mascotas">Mascotas</a>
-                    </nav>
-                </div>
-                <div style="display: flex; align-items: center; gap: 1rem;">
-                    <span class="user-info">Hola, <span id="user-display-name">Administrador</span></span>
-                    <button id="logout-button" class="btn btn-secondary">Cerrar Sesión</button>
-                </div>
-            </div>
-        </header>
-
-        <main class="container">
-            <!-- Vistas de la aplicación -->
-            <div id="dashboard-view">
-                <h1 style="font-size: 2.25rem; font-weight: 700; margin-bottom: 0.5rem;">Resumen Operacional</h1>
-                <p style="color: var(--color-text-muted); margin-bottom: 2rem;">El centro de control de tu veterinaria.</p>
-                
-                <!-- Módulos de Acceso Rápido -->
-                <div class="grid-2">
-                    <div id="goto-clientes" class="dashboard-module">
-                        <span style="color: var(--color-primary);">👤</span>
-                        <h2>Gestión de Clientes</h2>
-                        <p>Añadir, buscar y administrar los datos de los dueños.</p>
-                    </div>
-                    <div id="goto-mascotas" class="dashboard-module">
-                        <span style="color: var(--color-primary);">🐶</span>
-                        <h2>Gestión de Mascotas</h2>
-                        <p>Registrar nuevas mascotas y actualizar su información.</p>
-                    </div>
-                </div>
-                
-                <!-- Estadísticas Ficticias -->
-                <div class="stats-section card">
-                    <h3 style="color: var(--color-secondary);">Estadísticas Clave (Simuladas)</h3>
-                    <div class="grid-4">
-                        <div>
-                            <p class="stat-value">25</p>
-                            <p class="stat-label">Clientes Activos</p>
-                        </div>
-                        <div>
-                            <p class="stat-value">42</p>
-                            <p class="stat-label">Mascotas Registradas</p>
-                        </div>
-                        <div>
-                            <p class="stat-value">95%</p>
-                            <p class="stat-label">Perros/Gatos</p>
-                        </div>
-                        <div>
-                            <p class="stat-value">3</p>
-                            <p class="stat-label">Especies Exóticas</p>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <div id="clientes-view" class="hidden-view">
-                <!-- Header de Clientes -->
-                <div class="section-header">
-                    <h1>Registro de Clientes</h1>
-                    <button id="add-cliente-button" type="button" class="btn btn-primary">
-                        + Nuevo Cliente (Dueño)
-                    </button>
-                </div>
-                <!-- Buscador y Tabla -->
-                <div class="card">
-                    <input type="text" id="search-cliente" placeholder="Buscar por nombre, apellido o DNI...">
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Nombre Completo</th>
-                                    <th>Teléfono</th>
-                                    <th>Estado</th>
-                                    <th><span style="visibility: hidden;">Acciones</span></th>
-                                </tr>
-                            </thead>
-                            <tbody id="clientes-table-body">
-                                <!-- Filas de clientes se insertarán aquí -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <div id="mascotas-view" class="hidden-view">
-                 <!-- Header de Mascotas -->
-                 <div class="section-header">
-                    <h1>Gestión de Mascotas</h1>
-                    <button id="add-mascota-button" type="button" class="btn btn-primary">
-                        + Nueva Mascota
-                    </button>
-                </div>
-                <!-- Buscador y Tabla -->
-                <div class="card">
-                    <input type="text" id="search-mascota" placeholder="Buscar por nombre, especie o dueño...">
-                     <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Nombre Mascota</th>
-                                    <th>Especie</th>
-                                    <th>Dueño</th>
-                                    <th><span style="visibility: hidden;">Acciones</span></th>
-                                </tr>
-                            </thead>
-                            <tbody id="mascotas-table-body">
-                                <!-- Filas de mascotas se insertarán aquí -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- =========== MODAL Cliente (Registro/Edición de Dueño de Mascota) =========== -->
-    <div id="cliente-modal" class="modal-backdrop hidden-view">
-        <div class="modal-content" style="max-width: 500px;">
-            <h2 id="cliente-modal-title">Registro de Cliente</h2>
-            <form id="cliente-form">
-                <input type="hidden" id="cliente-id">
-                <div style="display: grid; gap: 1rem; margin-bottom: 2rem;">
-                    <div>
-                        <label for="cliente-nombre" style="display: block; font-size: 0.875rem; font-weight: 600;">Nombre</label>
-                        <input type="text" id="cliente-nombre" required>
-                    </div>
-                    <div>
-                        <label for="cliente-apellido" style="display: block; font-size: 0.875rem; font-weight: 600;">Apellido</label>
-                        <input type="text" id="cliente-apellido" required>
-                    </div>
-                    <div>
-                        <label for="cliente-dni" style="display: block; font-size: 0.875rem; font-weight: 600;">DNI/ID</label>
-                        <input type="text" id="cliente-dni" required>
-                    </div>
-                    <div>
-                        <label for="cliente-telefono" style="display: block; font-size: 0.875rem; font-weight: 600;">Teléfono</label>
-                        <input type="tel" id="cliente-telefono" required>
-                    </div>
-                    <div>
-                        <label for="cliente-direccion" style="display: block; font-size: 0.875rem; font-weight: 600;">Dirección</label>
-                        <input type="text" id="cliente-direccion">
-                    </div>
-                </div>
-                <div style="display: flex; justify-content: flex-end; gap: 1rem;">
-                    <button type="button" id="cancel-cliente-modal" class="btn btn-secondary">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Guardar Cliente</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    
-    <!-- Modal Mascota (CRUD) -->
-    <div id="mascota-modal" class="modal-backdrop hidden-view">
-        <div class="modal-content" style="max-width: 500px;">
-            <h2 id="mascota-modal-title">Registro de Mascota</h2>
-            <form id="mascota-form">
-                <input type="hidden" id="mascota-id">
-                <div style="display: grid; gap: 1rem; margin-bottom: 2rem;">
-                    <div>
-                        <label for="mascota-nombre" style="display: block; font-size: 0.875rem; font-weight: 600;">Nombre</label>
-                        <input type="text" id="mascota-nombre" required>
-                    </div>
-                     <div>
-                        <label for="mascota-especie" style="display: block; font-size: 0.875rem; font-weight: 600;">Especie</label>
-                        <input type="text" id="mascota-especie" required>
-                    </div>
-                     <div>
-                        <label for="mascota-raza" style="display: block; font-size: 0.875rem; font-weight: 600;">Raza</label>
-                        <input type="text" id="mascota-raza">
-                    </div>
-                    <div>
-                        <label for="mascota-edad" style="display: block; font-size: 0.875rem; font-weight: 600;">Edad</label>
-                        <input type="number" id="mascota-edad">
-                    </div>
-                    <div>
-                        <label for="mascota-dueño" style="display: block; font-size: 0.875rem; font-weight: 600;">Dueño</label>
-                        <select id="mascota-dueño" required>
-                            <!-- Opciones se llenarán con JS -->
-                        </select>
-                    </div>
-                    <div>
-                        <label for="mascota-salud" style="display: block; font-size: 0.875rem; font-weight: 600;">Observaciones de Salud</label>
-                        <textarea id="mascota-salud" rows="3"></textarea>
-                    </div>
-                </div>
-                <div style="display: flex; justify-content: flex-end; gap: 1rem;">
-                    <button type="button" id="cancel-mascota-modal" class="btn btn-secondary">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Guardar Mascota</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    <!-- End Modal Mascota -->
-
-    <!-- Notification Toast -->
-    <div id="toast" style="position: fixed; bottom: 1.25rem; right: 1.25rem; background-color: var(--color-secondary); color: white; padding: 0.75rem 1.5rem; border-radius: 8px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); transform: translateY(80px); opacity: 0; transition: all 0.3s ease-in-out; z-index: 50;">
-        <p id="toast-message" style="margin: 0;"></p>
-    </div>
-    <script src="script.js"></script>
-</body>
+    <script type="module" src="./controladores/main-index.js"></script>
+  </body>
 </html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Veterinaria El Dogo</title>
+    <link rel="stylesheet" href="./css/principal.css">
+  </head>
+
+  <body>
+    <main>
+      <!-- HEADER -->
+      <header id="app-header" class="app-header">
+        <h1>🐶 El Dogo | Gestión Veterinaria</h1>
+        <nav>
+          <button id="btn-dashboard">🏠 Inicio</button>
+          <button id="btn-logout" style="color: red">🚪 Salir</button>
+        </nav>
+      </header>
+      <div id="dashboard-view" class="view active">
+        <h2>Bienvenido a Veterinaria El Dogo</h2>
+        <p>
+          Selecciona una opción para gestionar la información de clientes y
+          pacientes.
+        </p>
+
+        <div class="dashboard-grid">
+          <div class="card card-blue" onclick="showView('clientes-list-view')">
+            <h3>👥 Gestión de Clientes</h3>
+            <p>Alta, modificación y baja de propietarios.</p>
+            <span>Acceder →</span>
+          </div>
+
+          <div class="card card-green" onclick="showView('mascotas-list-view')">
+            <h3>🐾 Gestión de Mascotas</h3>
+            <p>Registro de mascotas, historial y cambio de dueño.</p>
+            <span>Acceder →</span>
+          </div>
+        </div>
+      </div>
+      <!-- ===== CLIENTES ===== -->
+      <div id="clientes-list-view" class="view">
+        <div class="flex justify-between mb-4">
+          <h2>Lista de Clientes</h2>
+          <button id="btn-nuevo-cliente" class="btn btn-blue">
+            ➕ Nuevo Cliente
+          </button>
+        </div>
+
+        <input
+          type="text"
+          id="cliente-search"
+          placeholder="🔎 Buscar cliente..."
+          class="input-field"
+        />
+
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th class="sm-hidden">Teléfono</th>
+              <th class="text-right">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="clientes-table-body"></tbody>
+        </table>
+
+        <p id="no-clientes-found" class="text-center hidden">
+          No se encontraron clientes.
+        </p>
+      </div>
+
+      <div id="cliente-form-view" class="view">
+        <h2 id="cliente-form-title">Nuevo Cliente</h2>
+        <form id="cliente-form">
+          <input type="hidden" id="cliente-id" />
+
+          <div class="form-grid">
+            <input
+              type="text"
+              id="cliente-nombre"
+              placeholder="Nombre (Requerido)"
+              class="input-field"
+              required
+            />
+            <input
+              type="text"
+              id="cliente-apellido"
+              placeholder="Apellido (Requerido)"
+              class="input-field"
+              required
+            />
+            <input
+              type="text"
+              id="cliente-telefono"
+              placeholder="Teléfono (Requerido)"
+              class="input-field"
+              required
+            />
+            <input
+              type="email"
+              id="cliente-email"
+              placeholder="Email (Opcional)"
+              class="input-field"
+            />
+          </div>
+
+          <input
+            type="text"
+            id="cliente-direccion"
+            placeholder="Dirección (Opcional)"
+            class="input-field"
+          />
+
+          <div class="flex justify-end gap-2 mt-4">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              id="btn-cancelar-cliente"
+            >
+              Cancelar
+            </button>
+            <button type="submit" class="btn btn-blue" id="btn-guardar-cliente">
+              💾 Guardar Cliente
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- ===== MASCOTAS ===== -->
+      <div id="mascotas-list-view" class="view">
+        <div class="flex justify-between mb-4">
+          <h2>Lista de Mascotas</h2>
+          <button id="btn-nueva-mascota" class="btn btn-green">
+            ➕ Nueva Mascota
+          </button>
+        </div>
+
+        <input
+          type="text"
+          id="mascota-search"
+          placeholder="🔎 Buscar mascota o propietario..."
+          class="input-field"
+        />
+
+        <table>
+          <thead>
+            <tr>
+              <th>Mascota</th>
+              <th class="sm-hidden">Especie</th>
+              <th>Propietario</th>
+              <th class="text-right">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="mascotas-table-body"></tbody>
+        </table>
+
+        <p id="no-mascotas-found" class="text-center hidden">
+          No se encontraron pacientes.
+        </p>
+      </div>
+
+      <div id="mascota-form-view" class="view">
+        <h2 id="mascota-form-title">Nueva Mascota</h2>
+        <form id="mascota-form">
+          <input type="hidden" id="mascota-id" />
+
+          <div class="form-grid">
+            <input
+              type="text"
+              id="mascota-nombre"
+              placeholder="Nombre Mascota (Requerido)"
+              class="input-field"
+              required
+            />
+            <input
+              type="text"
+              id="mascota-especie"
+              placeholder="Especie (Ej: Perro, Gato)"
+              class="input-field"
+              required
+            />
+            <input
+              type="text"
+              id="mascota-raza"
+              placeholder="Raza (Opcional)"
+              class="input-field"
+            />
+            <input
+              type="number"
+              id="mascota-edad"
+              placeholder="Edad (Años - Opcional)"
+              class="input-field"
+            />
+          </div>
+
+          <label for="mascota-cliente-id">Propietario Actual (Requerido)</label>
+          <select id="mascota-cliente-id" class="input-field" required></select>
+
+          <textarea
+            id="mascota-salud"
+            rows="3"
+            placeholder="Problemas de salud u observaciones importantes..."
+            class="input-field"
+          ></textarea>
+
+          <div class="flex justify-between mt-4">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              onclick="showView('mascotas-list-view')"
+            >
+              Cancelar
+            </button>
+            <button type="submit" class="btn btn-green">
+              💾 Guardar Mascota
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <script type="module" src="./controladores/main-principal.js"></script>
+  </body>
+</html>
