@@ -4,14 +4,14 @@ import {
   actualizarClientes,
   eliminarClientes,
 } from "../modelos/clientes.js";
-import { seleccionarMascotas } from "../modelos/mascotas.js"; // 👈 Importamos las mascotas
+import { seleccionarMascotas } from "../modelos/mascotas.js"; 
 import { showView } from "./main-principal.js";
 
 export async function cargarClientes() {
   try {
     const [clientes, mascotas] = await Promise.all([
       seleccionarClientes(),
-      seleccionarMascotas(), // 👈 Cargamos todas las mascotas
+      seleccionarMascotas(), 
     ]);
 
     const tbody = document.getElementById("clientes-table-body");

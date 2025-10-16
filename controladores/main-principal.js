@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   await cargarClientes();
   await cargarMascotas();
-  await cargarUsuarios(); // lista de empleados visible
+  await cargarUsuarios(); 
 
   // Eventos generales
   document.getElementById("btn-logout")?.addEventListener("click", logout);
