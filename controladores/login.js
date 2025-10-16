@@ -1,5 +1,3 @@
-import { showView, logout } from "./admin.js";
-
 const API_BASE = "/julia-rodriguez/veterinaria-dogo/api/";
 
 export async function login() {
@@ -30,5 +28,15 @@ export async function login() {
   } catch (err) {
     errorElement.textContent = "❌ Error al conectar con el servidor.";
     errorElement.classList.remove("hidden");
+  }
+}
+export function logout() {
+  // Limpiar sesión / token
+  localStorage.removeItem("authToken");
+  // Redirigir al login
+  if (window.location.pathname.includes("principal.html")) {
+    window.location.href = "index.html";
+  } else {
+    showView("login-view");
   }
 }

@@ -1,38 +1,32 @@
-import { checkAdminExists, registerUser, showView } from "./admin.js";
+import { registerUser } from "./registro.js";
 import { login } from "./login.js";
 
-document.addEventListener("DOMContentLoaded", async () => {
-  await checkAdminExists();
-
-  // Eventos de formularios
-  document.getElementById("form-register")?.addEventListener("submit", (e) => {
-    e.preventDefault();
-    registerUser();
+// ===== showView =====
+export function showView(viewId) {
+  document.querySelectorAll(".view").forEach(v => {
+    v.classList.add("hidden");
+    v.classList.remove("active");
   });
 
-  document.getElementById("form-login")?.addEventListener("submit", (e) => {
-    e.preventDefault();
-    login();
-  });
+  const view = document.getElementById(viewId);
+  if(view) view.classList.remove("hidden");
+  if(view) view.classList.add("active");
+}
 
-  // Navegación entre vistas
-  document
-    .getElementById("link-register")
-    ?.addEventListener("click", async (e) => {
-      e.preventDefault();
-      const yaExiste = await checkAdminExists();
-      if (!yaExiste) {
-        showView("register-view");
-      }else{
-        alert("⚠️ Ya existe un administrador registrado. Por favor, inicia sesión.");
-      }
-    });
+// ===== Inicialización =====
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("form-register")?.addEventListener("submit", registerUser);
+  document.getElementById("form-login")?.addEventListener("submit", (e) => { e.preventDefault(); login(); });
+
+  document.getElementById("link-register")?.addEventListener("click", (e) => {
+    e.preventDefault();
+    showView("register-view");
+  });
 
   document.getElementById("link-back-login")?.addEventListener("click", (e) => {
     e.preventDefault();
     showView("login-view");
   });
 
-  // Exponer función global si se usa en HTML
   window.showView = showView;
 });

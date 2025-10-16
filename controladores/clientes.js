@@ -4,12 +4,19 @@ import {
   actualizarClientes,
   eliminarClientes,
 } from "../modelos/clientes.js";
+import { seleccionarMascotas } from "../modelos/mascotas.js"; // 👈 Importamos las mascotas
+import { showView } from "./main-principal.js";
 
 export async function cargarClientes() {
   try {
-    const clientes = await seleccionarClientes();
+    const [clientes, mascotas] = await Promise.all([
+      seleccionarClientes(),
+      seleccionarMascotas(), // 👈 Cargamos todas las mascotas
+    ]);
+
     const tbody = document.getElementById("clientes-table-body");
-    const searchValue = document.getElementById("cliente-search")?.value.toLowerCase() || "";
+    const searchValue =
+      document.getElementById("cliente-search")?.value.toLowerCase() || "";
     tbody.innerHTML = "";
 
     const filtrados = clientes.filter(
@@ -19,18 +26,37 @@ export async function cargarClientes() {
         c.telefono.includes(searchValue)
     );
 
-    document.getElementById("no-clientes-found").classList.toggle("hidden", filtrados.length > 0);
+    document
+      .getElementById("no-clientes-found")
+      .classList.toggle("hidden", filtrados.length > 0);
 
     filtrados.forEach((cliente) => {
+      const mascotasCliente = mascotas.filter(
+        (m) => String(m.cliente_id) === String(cliente.id)
+      );
+
+      const nombresMascotas =
+        mascotasCliente.length > 0
+          ? mascotasCliente.map((m) => m.nombre).join(", ")
+          : "—";
+
       const row = tbody.insertRow();
       row.innerHTML = `
-        <td>${cliente.nombre} ${cliente.apellido}</td>
-        <td class="sm-hidden">${cliente.telefono}</td>
-        <td class="text-right">
-          <button onclick="editarCliente(${cliente.id})" class="action-btn action-btn-blue">✏️ Editar</button>
-          <button onclick="confirmarEliminarCliente(${cliente.id}, '${cliente.nombre} ${cliente.apellido}')" class="action-btn action-btn-red">🗑️ Baja</button>
-        </td>
-      `;
+    <td>${cliente.nombre} ${cliente.apellido}</td>
+    <td>${cliente.telefono || "—"}</td>
+    <td>${nombresMascotas}</td>
+    <td class="text-right">
+      <button onclick="editarCliente(${
+        cliente.id
+      })" class="action-btn action-btn-blue">✏️ Editar</button>
+      <button onclick="confirmarEliminarCliente(${cliente.id}, '${
+        cliente.nombre
+      } ${
+        cliente.apellido
+      }')" class="action-btn action-btn-red">🗑️ Baja</button>
+    </td>
+  `;
+
     });
   } catch (error) {
     console.error("Error cargando clientes:", error);
@@ -48,10 +74,19 @@ export async function guardarCliente(event) {
   const id = document.getElementById("cliente-id").value;
   const formData = new FormData();
   formData.append("nombre", document.getElementById("cliente-nombre").value);
-  formData.append("apellido", document.getElementById("cliente-apellido").value);
-  formData.append("telefono", document.getElementById("cliente-telefono").value);
+  formData.append(
+    "apellido",
+    document.getElementById("cliente-apellido").value
+  );
+  formData.append(
+    "telefono",
+    document.getElementById("cliente-telefono").value
+  );
   formData.append("email", document.getElementById("cliente-email").value);
-  formData.append("direccion", document.getElementById("cliente-direccion").value);
+  formData.append(
+    "direccion",
+    document.getElementById("cliente-direccion").value
+  );
 
   try {
     const resultado = id
@@ -92,7 +127,8 @@ export async function editarCliente(id) {
     const clientes = await seleccionarClientes();
     const cliente = clientes.find((c) => String(c.id) === String(id));
     if (cliente) {
-      document.getElementById("cliente-form-title").textContent = "Modificar Cliente 👥";
+      document.getElementById("cliente-form-title").textContent =
+        "Modificar Cliente 👥";
       document.getElementById("cliente-id").value = cliente.id;
       document.getElementById("cliente-nombre").value = cliente.nombre;
       document.getElementById("cliente-apellido").value = cliente.apellido;
@@ -101,7 +137,8 @@ export async function editarCliente(id) {
       document.getElementById("cliente-direccion").value = cliente.direccion;
     }
   } else {
-    document.getElementById("cliente-form-title").textContent = "Nuevo Cliente ➕";
+    document.getElementById("cliente-form-title").textContent =
+      "Nuevo Cliente ➕";
   }
 
   showView("cliente-form-view");

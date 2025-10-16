@@ -1,4 +1,11 @@
-import { logout } from "./admin.js";
+import {
+  cargarUsuarios,
+  editarUsuario,
+  confirmarEliminarUsuario,
+  guardarUsuario,
+} from "./usuarios.js";
+
+import { logout } from "./login.js";
 import {
   cargarClientes as renderClientes,
   guardarCliente,
@@ -13,15 +20,28 @@ import {
   populateClienteSelect as populateClientesMascotas,
 } from "./mascotas.js";
 
-// ===== Safe Fetch desde la API real =====
+// ===== showView =====
+export function showView(viewId) {
+  document.querySelectorAll(".view").forEach((v) => {
+    v.classList.add("hidden");
+    v.classList.remove("active");
+  });
+
+  const view = document.getElementById(viewId);
+  if (view) view.classList.remove("hidden");
+  if (view) view.classList.add("active");
+}
+
+// ===== Safe fetch helper =====
 async function safeFetchJson(endpoint) {
   try {
-    const res = await fetch(`/julia-rodriguez/veterinaria-dogo/api/${endpoint}`);
+    const res = await fetch(
+      `/julia-rodriguez/veterinaria-dogo/api/${endpoint}`
+    );
     const text = await res.text();
     try {
       return JSON.parse(text);
-    } catch (err) {
-      console.error("Respuesta no es JSON válido:", text);
+    } catch {
       return [];
     }
   } catch (err) {
@@ -30,72 +50,89 @@ async function safeFetchJson(endpoint) {
   }
 }
 
-// ===== Wrappers para cargar datos =====
+// ===== Wrappers =====
 async function cargarClientes() {
-  try {
-    const clientes = await safeFetchJson("clientes.php");
-    await renderClientes(clientes);
-  } catch (err) {
-    console.error("Error cargando clientes:", err);
-  }
+  const clientes = await safeFetchJson("clientes.php");
+  await renderClientes(clientes);
 }
 
 async function cargarMascotas() {
-  try {
-    const mascotas = await safeFetchJson("mascotas.php");
-    await renderMascotas(mascotas);
-    await populateClientesMascotas();
-  } catch (err) {
-    console.error("Error cargando mascotas:", err);
-  }
+  const mascotas = await safeFetchJson("mascotas.php");
+  await renderMascotas(mascotas);
+  await populateClientesMascotas();
 }
-
-// ===== Cambio de vistas =====
-function showView(viewId) {
-  document.querySelectorAll(".view").forEach(v => {
-    v.classList.remove("active");
-    v.classList.add("hidden");
-  });
-
-  const view = document.getElementById(viewId);
-  if (view) {
-    view.classList.add("active");
-    view.classList.remove("hidden");
-  }
-
-  if (viewId === "clientes-list-view") cargarClientes();
-  if (viewId === "mascotas-list-view") cargarMascotas();
-}
-
-window.showModal = function(titulo, mensaje, textoBoton, accionConfirmar) {
-  if (confirm(`${titulo}\n\n${mensaje}`)) {
-    accionConfirmar();
-  }
-};
-
 
 // ===== Inicialización =====
-document.addEventListener("DOMContentLoaded", () => {
-  showView("dashboard-view");
+document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("app-header")?.classList.remove("hidden");
+
+  await cargarClientes();
+  await cargarMascotas();
+  await cargarUsuarios(); // lista de empleados visible
 
   // Eventos generales
   document.getElementById("btn-logout")?.addEventListener("click", logout);
-  document.getElementById("btn-dashboard")?.addEventListener("click", () => showView("dashboard-view"));
+  document
+    .getElementById("btn-dashboard")
+    ?.addEventListener("click", async () => {
+      await cargarClientes();
+      await cargarMascotas();
+      await cargarUsuarios();
+      showView("dashboard-view");
+    });
+
+  document
+    .getElementById("btn-clientes")
+    ?.addEventListener("click", () => showView("clientes-list-view"));
+  document
+    .getElementById("btn-mascotas")
+    ?.addEventListener("click", () => showView("mascotas-list-view"));
 
   // Clientes
-  document.getElementById("cliente-form")?.addEventListener("submit", guardarCliente);
-  document.getElementById("cliente-search")?.addEventListener("keyup", cargarClientes);
-  document.getElementById("btn-nuevo-cliente")?.addEventListener("click", () => editarCliente(null));
-  document.getElementById("btn-cancelar-cliente")?.addEventListener("click", () => showView("clientes-list-view"));
+  document
+    .getElementById("cliente-form")
+    ?.addEventListener("submit", guardarCliente);
+  document
+    .getElementById("cliente-search")
+    ?.addEventListener("keyup", cargarClientes);
+  document
+    .getElementById("btn-nuevo-cliente")
+    ?.addEventListener("click", () => editarCliente(null));
+  document
+    .getElementById("btn-cancelar-cliente")
+    ?.addEventListener("click", () => {
+      showView("clientes-list-view");
+    });
 
   // Mascotas
-  document.getElementById("mascota-form")?.addEventListener("submit", guardarMascota);
-  document.getElementById("btn-nueva-mascota")?.addEventListener("click", () => editarMascota(null));
-  document.getElementById("mascota-search")?.addEventListener("keyup", cargarMascotas);
+  document
+    .getElementById("mascota-form")
+    ?.addEventListener("submit", guardarMascota);
+  document
+    .getElementById("btn-nueva-mascota")
+    ?.addEventListener("click", () => editarMascota(null));
+  document
+    .getElementById("mascota-search")
+    ?.addEventListener("keyup", cargarMascotas);
+  document
+    .getElementById("btn-cancelar-mascota")
+    ?.addEventListener("click", () => {
+      showView("mascotas-list-view");
+    });
+  // Usuarios
+  document
+    .getElementById("usuario-form")
+    ?.addEventListener("submit", guardarUsuario);
+  document
+    .getElementById("usuario-search")
+    ?.addEventListener("keyup", cargarUsuarios);
+  document
+    .getElementById("btn-nuevo-usuario")
+    ?.addEventListener("click", () => editarUsuario(null));
 
-  // Exponer funciones globales si se usan en HTML
-  window.showView = showView;
+  // Exponer funciones globales para botones dentro de tabla
+  window.editarUsuario = editarUsuario;
+  window.confirmarEliminarUsuario = confirmarEliminarUsuario;
   window.editarCliente = editarCliente;
   window.confirmarEliminarCliente = confirmarEliminarCliente;
   window.editarMascota = editarMascota;

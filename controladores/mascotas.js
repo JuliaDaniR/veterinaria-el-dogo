@@ -6,6 +6,8 @@ import {
 } from "../modelos/mascotas.js";
 
 import { seleccionarClientes } from "../modelos/clientes.js";
+import { showView } from "./main-principal.js";
+
 // Obtiene el nombre completo del dueño
 async function getClientName(clienteId) {
   const clientes = await seleccionarClientes();
